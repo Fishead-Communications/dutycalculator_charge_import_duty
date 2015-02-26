@@ -2,7 +2,7 @@
 
 class Dutycalculator_Charge_Helper_Tax extends Mage_Tax_Helper_Data{
 	public function getPrice($product, $price, $includingTax = null, $shippingAddress = null, $billingAddress = null,
-							 $ctc = null, $store = null, $priceIncludesTax = null
+							 $ctc = null, $store = null, $priceIncludesTax = null, $roundPrice = true
 	) {
 		$price=parent::getPrice($product, $price, $includingTax, $shippingAddress, $billingAddress, $ctc, $store, $priceIncludesTax);
 
