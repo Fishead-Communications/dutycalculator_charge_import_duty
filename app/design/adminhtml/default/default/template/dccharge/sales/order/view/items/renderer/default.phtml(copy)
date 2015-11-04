@@ -235,29 +235,30 @@
             </span>
         <?php endif; ?>
     </td>
-    <?php if (!$_order->getDcOrderId() || $_order->getDeliveryDutyType() == Dutycalculator_Charge_Helper_Data::DC_DELIVERY_TYPE_DDU || $_order->getFailedCalculation()):?>
-        <td class="a-right"><?php echo $this->displayPrices($_item->getBaseTaxAmount() + $_item->getBaseHiddenTaxAmount() + $_item->getBaseImportDutyTax(), $_item->getTaxAmount()+ $_item->getHiddenTaxAmount() + $_item->getImportDutyTax()); ?></td>
-        <?php if ($this->isTaxPrecentagesEnabled()): ?>
-            <td class="a-right"><?php echo $this->displayTaxPercent($_item) ?></td>
-        <?php endif; ?>
-    <?php else:?>
-        <td class="a-right">
-                <?php if ($this->isTaxPrecentagesEnabled() && ($_item->getSalesTaxRate() || $_item->getTaxPercent())):?>
-                <?php echo sprintf('%s%%', $_item->getTaxPercent() + $_item->getSalesTaxRate() + 0) ?>
-                <br/>
-            <?php endif; ?>
-            <?php echo $this->displayPrices($_item->getBaseTaxAmount() + $_item->getBaseHiddenTaxAmount() + $_item->getBaseSalesTax(), $_item->getTaxAmount()+ $_item->getHiddenTaxAmount() + $_item->getSalesTax()); ?>
-        </td>
-        <td class="a-right">
-            <?php if ($this->isTaxPrecentagesEnabled() && $_item->getImportDutyRate()):?>
-                <?php echo sprintf('%s%%', $_item->getImportDutyRate() + 0);?>
-                <br/>
-            <?php endif;?>
-            <?php echo $this->displayPrices($_item->getBaseImportDuty(), $_item->getImportDuty()); ?>
-        </td>
-    <?php endif;?>
+	<?php if (!$_order->getDcOrderId() || $_order->getDeliveryDutyType() == Dutycalculator_Charge_Helper_Data::DC_DELIVERY_TYPE_DDU || $_order->getFailedCalculation()):?>
+		<td class="a-right"><?php echo $this->displayPrices($_item->getBaseTaxAmount() + $_item->getBaseHiddenTaxAmount() + $_item->getBaseImportDutyTax(), $_item->getTaxAmount()+ $_item->getHiddenTaxAmount() + $_item->getImportDutyTax()); ?></td>
+		<td class="a-right"><?php echo $this->displayTaxPercent($_item) ?></td>
+	<?php else:?>
+		<td class="a-right">
+			<?php if ($_item->getSalesTaxRate() || $_item->getTaxPercent()):?>
+				<?php echo sprintf('%s%%', $_item->getTaxPercent() + $_item->getSalesTaxRate() + 0) ?>
+				<br/>
+			<?php endif;?>
+			<?php echo $this->displayPrices($_item->getBaseTaxAmount() + $_item->getBaseHiddenTaxAmount() + $_item->getBaseSalesTax(), $_item->getTaxAmount()+ $_item->getHiddenTaxAmount() + $_item->getSalesTax()); ?>
+		</td>
+		<td class="a-right">
+			<?php if ($_item->getImportDutyRate()):?>
+				<?php echo sprintf('%s%%', $_item->getImportDutyRate() + 0);?>
+				<br/>
+			<?php endif;?>
+			<?php echo $this->displayPrices($_item->getBaseImportDuty(), $_item->getImportDuty()); ?>
+		</td>
+	<?php endif;?>
     <td class="a-right"><?php echo $this->displayPriceAttribute('discount_amount') ?></td>
     <td class="a-right last">
-		<?php echo $this->displayRowTotal() ?>
+		<?php echo $this->displayPrices(
+			$_item->getBaseRowTotal() + $_item->getBaseTaxAmount() + $_item->getBaseHiddenTaxAmount() + $_item->getBaseImportDutyTax() + $_item->getBaseWeeeTaxAppliedRowAmount() - $_item->getBaseDiscountAmount(),
+			$_item->getRowTotal() + $_item->getTaxAmount() + $_item->getImportDutyTax() + $_item->getHiddenTaxAmount() + $_item->getWeeeTaxAppliedRowAmount() - $_item->getDiscountAmount()
+		) ?>
     </td>
 </tr>

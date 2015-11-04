@@ -77,10 +77,6 @@ class Dutycalculator_Charge_Model_Frontend_Observer
 
 	public function initDCRates($event)
 	{
-        if(!Mage::helper('dccharge')->enabledShowTax())
-        {
-            return;
-        }
 		/* @var $order Mage_Sales_Model_Order */
 		$order = $event->getOrder();
 		/* @var $quote Mage_Sales_Model_Quote */
@@ -148,27 +144,44 @@ class Dutycalculator_Charge_Model_Frontend_Observer
 				$params['desc'][$idx] = $description;
 				$idx++;
 			}
-            $quote->save();
-            $rates = Dutycalculator_Charge_Model_Importdutytaxes::getRatesDetails($quote->getShippingAddress(), $params['cat'], $params['desc'], $params['reference']);
-			foreach ($quoteItems as $quoteItem)
-			{
-				if (isset($rates[$quoteItem->getId()]))
-				{
-					$quoteItem->setSalesTaxRate($rates[$quoteItem->getId()]['sales_tax_rate']);
-					$quoteItem->setImportDutyRate($rates[$quoteItem->getId()]['duty_rate']);
-				}
-			}
+
 			$quote->save();
-			$orderItems = $order->getAllVisibleItems();
-			foreach ($orderItems as $orderItem)
-			{
-				/* @var $orderItem Mage_Sales_Model_Order_Item */
-				if (isset($rates[$orderItem->getQuoteItemId()]))
-				{
-					$orderItem->setSalesTaxRate($rates[$orderItem->getQuoteItemId()]['sales_tax_rate']);
-					$orderItem->setImportDutyRate($rates[$orderItem->getQuoteItemId()]['duty_rate']);
-				}
+
+            $orderItems = $order->getAllVisibleItems();
+            foreach ($orderItems as $orderItem)
+            {
+                /* @var $orderItem Mage_Sales_Model_Order_Item */
+                if (isset($rates[$orderItem->getQuoteItemId()]))
+                {
+                    $orderItem->setSalesTaxRate($rates[$orderItem->getQuoteItemId()]['sales_tax_rate']);
+                    $orderItem->setImportDutyRate($rates[$orderItem->getQuoteItemId()]['duty_rate']);
+                }
+            }
+        }
+	}
+
+	/**
+	 * @param $event
+	 * @param $categoriesIds
+	 * @param $descriptions
+	 * @param $references
+	 */
+	protected function initRateForQuoteAndOrder($event, $categoriesIds, $descriptions, $references)
+	{
+		$quote = $event->getQuote();
+		$quoteItems = $quote->getAllVisibleItems();
+
+		$order = $event->getOrder();
+		$orderItems = $order->getAllVisibleItems();
+
+		$rates = Dutycalculator_Charge_Model_Importdutytaxes::getRatesDetails($quote->getShippingAddress(),
+			$categoriesIds, $descriptions, $references);
+
+		array_map(function ($item) use ($rates) {
+			if (isset($rates[$item->getId()])) {
+				$item->setSalesTaxRate($rates[$item->getId()]['sales_tax_rate']);
+				$item->setImportDutyRate($rates[$item->getId()]['duty_rate']);
 			}
-		}
+		}, $quoteItems, $orderItems);
 	}
 }

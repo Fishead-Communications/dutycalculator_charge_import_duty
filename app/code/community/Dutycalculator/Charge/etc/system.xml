@@ -38,6 +38,16 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </allow-specific-countries>
+						<show-tax>
+							<label>Show tax rate in order</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment><![CDATA[This is not a free service, you will be charged “Get HS code” rate during checkout as per <a href="http://www.dutycalculator.com/compare-plans/" target="_blank">your account plan</a>]]></comment>
+                            <sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</show-tax>
                         <specific-countries translate="label">
                             <label></label>
                             <frontend_type>multiselect</frontend_type>

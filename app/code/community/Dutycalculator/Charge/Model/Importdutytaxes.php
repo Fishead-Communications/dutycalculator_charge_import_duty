@@ -42,8 +42,7 @@ class Dutycalculator_Charge_Model_Importdutytaxes extends Varien_Object
 		}
 		catch (Exception $ex)
 		{
-			$result = array();
-			return $result;
+			return array();
 		}
 	}
 

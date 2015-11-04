@@ -13,7 +13,7 @@
 	</admin>
 	<modules>
 		<Dutycalculator_Charge>
-			<version>0.4.6</version>
+			<version>0.4.10</version>
 			<depends>
 				<Mage_Checkout/>
 				<Mage_Tax/>

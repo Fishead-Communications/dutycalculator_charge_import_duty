@@ -46,13 +46,15 @@
                 <th><?php echo $this->helper('sales')->__('Price') ?></th>
                 <th class="a-center"><?php echo $this->helper('sales')->__('Qty') ?></th>
                 <th><?php echo $this->helper('sales')->__('Subtotal') ?></th>
-				<?php if (!$_order->getDcOrderId() || $_order->getDeliveryDutyType() == Dutycalculator_Charge_Helper_Data::DC_DELIVERY_TYPE_DDU || $_order->getFailedCalculation()):?>
-					<th><span class="nobr"><?php echo $this->helper('sales')->__('Tax Amount') ?></span></th>
-					<th><span class="nobr"><?php echo $this->helper('sales')->__('Tax Percent') ?></span></th>
-				<?php else:?>
-					<th><span class="nobr"><?php echo $this->helper('dccharge')->__('Sales Tax') ?></span></th>
-					<th><span class="nobr"><?php echo $this->helper('dccharge')->__('Import Duty') ?></span></th>
-				<?php endif;?>
+                <?php if (!$_order->getDcOrderId() || $_order->getDeliveryDutyType() == Dutycalculator_Charge_Helper_Data::DC_DELIVERY_TYPE_DDU || $_order->getFailedCalculation()):?>
+                    <th><span class="nobr"><?php echo $this->helper('sales')->__('Tax Amount') ?></span></th>
+                    <?php if ($this->helper('dccharge')->enabledShowTax()): ?>
+                        <th><span class="nobr"><?php echo $this->helper('sales')->__('Tax Percent') ?></span></th>
+                    <?php endif;?>
+                <?php else:?>
+                    <th><span class="nobr"><?php echo $this->helper('dccharge')->__('Sales Tax') ?></span></th>
+                    <th><span class="nobr"><?php echo $this->helper('dccharge')->__('Import Duty') ?></span></th>
+                <?php endif;?>
                 <th><span class="nobr"><?php echo $this->helper('sales')->__('Discount Amount') ?></span></th>
                 <th class="last"><span class="nobr"><?php echo $this->helper('sales')->__('Row Total') ?></span></th>
             </tr>

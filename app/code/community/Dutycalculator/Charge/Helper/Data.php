@@ -155,6 +155,14 @@ class Dutycalculator_Charge_Helper_Data extends Mage_Core_Helper_Abstract
 		return true;
 	}
 
+	/**
+	 * @return bool
+	 */
+	public function enabledShowTax()
+	{
+		return Mage::getStoreConfig('dc_charge_extension/dccharge/show-tax') === '1';
+	}
+
 	public function logApiErrors($message)
 	{
 		try {

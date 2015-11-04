@@ -29,7 +29,7 @@
 		</reference>
 		<reference name="order_items">
 			<action method="setTemplate"><template>dccharge/sales/order/view/items.phtml</template></action>
-			<action method="addItemRender"><type>default</type><block>adminhtml/sales_order_view_items_renderer_default</block><template>dccharge/sales/order/view/items/renderer/default.phtml</template></action>
+			<action method="addItemRender"><type>default</type><block>dccharge/sales_order_view_items_renderer</block><template>dccharge/sales/order/view/items/renderer/default.phtml</template></action>
 		</reference>
 		<reference name="tax">
 			<action method="setTemplate"><template>dccharge/sales/order/totals/tax.phtml</template></action>
