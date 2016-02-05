@@ -86,7 +86,7 @@ class Dutycalculator_Charge_Model_Sales_Order_Pdf_Creditmemo extends Mage_Sales_
                 }
 
                 if ($this->y<20) {
-                    $page = $this->newPage(array('table_header' => true), $order);
+                    $page = $this->newPage(array('table_header' => true, 'order' => $order));
                 }
 
                 /* Draw item */
@@ -107,7 +107,7 @@ class Dutycalculator_Charge_Model_Sales_Order_Pdf_Creditmemo extends Mage_Sales_
 
     protected function _drawHeader(Zend_Pdf_Page $page, $order)
     {
-		if (!$order->getDcOrderId() || $order->getDeliveryDutyType() == Dutycalculator_Charge_Helper_Data::DC_DELIVERY_TYPE_DDU || $order->getFailedCalculation())
+		if (($order instanceof Mage_Sales_Model_Order) && (!$order->getDcOrderId() || $order->getDeliveryDutyType() == Dutycalculator_Charge_Helper_Data::DC_DELIVERY_TYPE_DDU || $order->getFailedCalculation()))
 		{
 			$font = $page->getFont();
 			$size = $page->getFontSize();
@@ -179,9 +179,10 @@ class Dutycalculator_Charge_Model_Sales_Order_Pdf_Creditmemo extends Mage_Sales_
      * @param array $settings
      * @return Zend_Pdf_Page
      */
-    public function newPage(array $settings = array(), $order)
+    public function newPage(array $settings = array())
     {
         $page = parent::newPage($settings);
+        $order = $settings['order'];
 
         if (!empty($settings['table_header'])) {
             $this->_setFontRegular($page);

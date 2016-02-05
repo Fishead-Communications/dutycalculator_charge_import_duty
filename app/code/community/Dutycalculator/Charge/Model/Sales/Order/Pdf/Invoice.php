@@ -48,7 +48,7 @@ class Dutycalculator_Charge_Model_Sales_Order_Pdf_Invoice extends Mage_Sales_Mod
 			$page->drawRectangle(25, $this->y, 570, $this->y -15);
 			$this->y -=10;
 			/* Add table head */
-			if (!$order->getDcOrderId() || $order->getDeliveryDutyType() == Dutycalculator_Charge_Helper_Data::DC_DELIVERY_TYPE_DDU || $order->getFailedCalculation())
+			if (($order instanceof Mage_Sales_Model_Order) && (!$order->getDcOrderId() || $order->getDeliveryDutyType() == Dutycalculator_Charge_Helper_Data::DC_DELIVERY_TYPE_DDU || $order->getFailedCalculation()))
 			{
 				$page->setFillColor(new Zend_Pdf_Color_RGB(0.4, 0.4, 0.4));
 				$page->drawText(Mage::helper('sales')->__('Products'), 35, $this->y, 'UTF-8');
@@ -83,7 +83,7 @@ class Dutycalculator_Charge_Model_Sales_Order_Pdf_Invoice extends Mage_Sales_Mod
 				}
 
 				if ($this->y < 15) {
-					$page = $this->newPage(array('table_header' => true), $order);
+					$page = $this->newPage(array('table_header' => true, 'order' => $order));
 				}
 
 				/* Draw item */
@@ -109,8 +109,9 @@ class Dutycalculator_Charge_Model_Sales_Order_Pdf_Invoice extends Mage_Sales_Mod
 	 * @param array $settings
 	 * @return Zend_Pdf_Page
 	 */
-	public function newPage(array $settings = array(), $order)
+	public function newPage(array $settings = array())
 	{
+        $order = $settings['order'];
 		/* Add new table head */
 		$page = $this->_getPdf()->newPage(Zend_Pdf_Page::SIZE_A4);
 		$this->_getPdf()->pages[] = $page;
@@ -123,7 +124,7 @@ class Dutycalculator_Charge_Model_Sales_Order_Pdf_Invoice extends Mage_Sales_Mod
 			$page->setLineWidth(0.5);
 			$page->drawRectangle(25, $this->y, 570, $this->y-15);
 			$this->y -=10;
-			if (!$order->getDcOrderId() || $order->getDeliveryDutyType() == Dutycalculator_Charge_Helper_Data::DC_DELIVERY_TYPE_DDU || $order->getFailedCalculation())
+			if (($order instanceof Mage_Sales_Model_Order) && (!$order->getDcOrderId() || $order->getDeliveryDutyType() == Dutycalculator_Charge_Helper_Data::DC_DELIVERY_TYPE_DDU || $order->getFailedCalculation()))
 			{
 				$page->setFillColor(new Zend_Pdf_Color_RGB(0.4, 0.4, 0.4));
 				$page->drawText(Mage::helper('sales')->__('Products'), 35, $this->y, 'UTF-8');
